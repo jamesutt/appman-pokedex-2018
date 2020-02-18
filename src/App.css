@@ -2,6 +2,24 @@ h1 {
   text-align: center;
 }
 
+.card_name,
+input {
+  font-family: 'Gaegu', cursive;
+}
+
+.card_name {
+  font-size: 32px;
+}
+
+button {
+  font-family: 'Atma', cursive;
+}
+
+input,
+button {
+  outline: none;
+}
+
 #root {
   position: absolute;
   left: 50%;
@@ -35,9 +53,6 @@ h1 {
   height: 273px;
 }
 
-.card_name {
-}
-
 .card_stats_row {
   display: grid;
   grid-template-columns: 60px auto;
@@ -45,9 +60,15 @@ h1 {
   align-items: center;
 }
 
-.card_stats_bar {
+.card_stats_bar_background {
   height: 40px;
   width: 100%;
+  background-color: #e4e4e4;
+  border-radius: 20px;
+}
+
+.card_stats_bar {
+  height: 40px;
   background-color: #f3701a;
   border-radius: 20px;
 }

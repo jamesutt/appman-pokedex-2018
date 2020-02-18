@@ -27,7 +27,6 @@ function App() {
     fetch('http://localhost:3030/api/cards')
       .then(res => res.json())
       .then(result => {
-        console.log(result.cards)
         setCards(result.cards)
       })
   }, [])
@@ -105,6 +104,7 @@ function App() {
                 buttonType="ADD"
                 onCardAdd={onCardAdd}
                 onCardRemove={onCardRemove}
+                key={card.id}
               />
             ))}
           </div>
@@ -114,7 +114,60 @@ function App() {
   )
 }
 
+const getStats = card => {
+  const hp = Math.max(Math.min(card.hp, 100), 0)
+
+  let strength
+  if (!card.attacks) {
+    strength = 0
+  } else {
+    strength = Math.min(card.attacks.length * 50, 100)
+  }
+
+  let weakness
+  if (!card.weaknesses) {
+    weakness = 0
+  } else {
+    weakness = Math.min(card.weaknesses.length * 50, 100)
+  }
+
+  let damage
+  if (!card.attacks) {
+    damage = 0
+  } else {
+    damage = card.attacks
+      .map(attack => {
+        const match = attack.damage.match(/\d/g)
+
+        if (match) {
+          return Number(match.join(''))
+        } else {
+          return 0
+        }
+      })
+      .reduce((a, b) => a + b, 0)
+  }
+
+  let happiness = (hp / 10 + damage / 10 + 10 - weakness) / 5
+
+  if (isNaN(happiness)) {
+    happiness = 0
+  } else {
+    happiness = Math.round(10 + happiness)
+  }
+
+  return {
+    hp,
+    strength,
+    weakness,
+    damage,
+    happiness,
+  }
+}
+
 const Card = ({ card, buttonType, onCardAdd, onCardRemove }) => {
+  const stats = getStats(card)
+
   return (
     <div className="card_container" key={card.id}>
       <img src={card.imageUrl} alt="" className="card_thumbnail" />
@@ -122,22 +175,39 @@ const Card = ({ card, buttonType, onCardAdd, onCardRemove }) => {
         <h2 className="card_name">{card.name}</h2>
         <div className="card_stats_row">
           HP
-          <div className="card_stats_bar"></div>
+          <div className="card_stats_bar_background">
+            <div
+              className="card_stats_bar"
+              style={{ width: `${stats.hp}%` }}
+            ></div>
+          </div>
         </div>
         <div className="card_stats_row">
           STR
-          <div className="card_stats_bar"></div>
+          <div className="card_stats_bar_background">
+            <div
+              className="card_stats_bar"
+              style={{ width: `${stats.strength}%` }}
+            ></div>
+          </div>
         </div>
         <div className="card_stats_row">
           WEAK
-          <div className="card_stats_bar"></div>
+          <div className="card_stats_bar_background">
+            <div
+              className="card_stats_bar"
+              style={{ width: `${stats.weakness}%` }}
+            ></div>
+          </div>
         </div>
         <div className="card_stats_happiness_container">
-          <img src={cuteIcon} alt="" />
-          <img src={cuteIcon} alt="" />
-          <img src={cuteIcon} alt="" />
-          <img src={cuteIcon} alt="" />
-          <img src={cuteIcon} alt="" />
+          {Array.from({ length: stats.happiness }, (v, i) => i).map(index => (
+            <img
+              src={cuteIcon}
+              alt=""
+              key={`${card.name}-happiness-${index}`}
+            />
+          ))}
         </div>
       </div>
       {buttonType === 'REMOVE' ? (
