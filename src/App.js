@@ -20,7 +20,7 @@ const COLORS = {
 function App() {
   const [myCards, setMyCards] = useState([])
   const [cards, setCards] = useState([])
-  const [isModalOpen, setIsModalOpen] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchKey, setSearchKey] = useState('')
 
   useEffect(() => {
