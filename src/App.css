@@ -21,6 +21,7 @@ button {
 }
 
 #root {
+  margin-top: 25px;
   position: absolute;
   left: 50%;
   top: 50%;
