@@ -1,12 +1,3 @@
-div,
-button {
-  font-family: 'Atma', cursive;
-}
-
-input {
-  font-family: 'Gaegu', cursive;
-}
-
 h1 {
   text-align: center;
 }
@@ -18,201 +9,131 @@ h1 {
   transform: translate(-50%, -50%);
 }
 
-#bottom_bar {
-  background-color: #ec5656;
-  height: 100px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-#bottom_bar_button {
-  background-color: #ec5656;
-  border: none;
-  height: 100px;
-  width: 100px;
-  position: relative;
-  bottom: 50px;
-  left: 462px;
-  border-radius: 100%;
-  font-size: 60px;
-  color: #ffffff;
-}
-
-#modal_container {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 1024px;
-  height: 768px;
-  background-color: #000000a3;
+.card_collection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: min-content;
+  grid-column-gap: 24px;
+  height: 550px;
   overflow: auto;
-  z-index: 1;
-}
-
-#modal_content {
-  margin: 24px auto;
-  width: 976px;
-  height: 720px;
-  background-color: #ffffff;
-  padding: 8px;
-  overflow: auto;
-}
-
-#modal_search_container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #e6e6e6;
-}
-
-#modal_search {
-  font-size: 32px;
-  padding: 8px;
-  box-sizing: border-box;
-  width: 100%;
-  border: none;
-
-  background: url('./search.png') no-repeat scroll 7px 7px;
-}
-
-#model_search_icon {
-  width: 48px;
-  height: 48px;
 }
 
 .card_container {
   background-color: #f3f4f7;
-  padding: 16px;
-  margin: 16px 8px;
-
   display: flex;
-  justify-content: space-between;
-}
-
-.card_image {
-  display: block;
-  max-width: 200px;
-  max-height: 200px;
-  width: auto;
-  height: auto;
-}
-
-.card_stats_detail {
-  padding: 0 24px;
-}
-
-.card_stats_detail > h2 {
-  font-family: 'Gaegu', cursive;
-  font-size: 32px;
-  margin: 16px 0;
-}
-
-.stat_item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  width: 300px;
-}
-
-.stat_bar {
-  height: 30px;
-  width: 200px;
-  background-color: #f3701a;
-  border-radius: 20px;
-}
-
-.stat_happiness_container {
-  margin: 8px 0;
-}
-
-.happiness_icon {
-  max-width: 50px;
-}
-
-.card_stats_left {
-  display: flex;
+  align-items: flex-start;
+  margin-bottom: 24px;
 }
 
 .card_stats {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.add_button {
-  border: none;
-  height: 50px;
-  background-color: transparent;
-  font-size: 36px;
-  cursor: pointer;
-  color: #dc7777;
-  display: none;
-}
-
-.card_container:hover .add_button {
-  display: block;
-}
-
-.my_card_outer_container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 250px;
-  grid-gap: 16px;
-  height: 575px;
-  overflow: auto;
-}
-
-.my_card_container {
-  background-color: #f3f4f7;
-  display: flex;
-  justify-content: space-between;
-}
-
-.my_card_stats {
-  display: flex;
-}
-
-.my_card_image {
-  width: 143px;
-  height: 200px;
-}
-
-.my_card_stats_details {
   margin-left: 16px;
 }
 
-.remove_button {
-  border: none;
-  height: 50px;
-  background-color: transparent;
-  font-size: 36px;
-  cursor: pointer;
-  color: #dc7777;
-  display: none;
+.card_thumbnail {
+  width: 196px;
+  height: 273px;
 }
 
-.my_stat_item {
+.card_name {
+}
+
+.card_stats_row {
   display: grid;
-  grid-template-columns: 80px auto;
+  grid-template-columns: 60px auto;
   margin-bottom: 8px;
+  align-items: center;
 }
 
-.my_stat_bar {
+.card_stats_bar {
+  height: 40px;
   width: 100%;
-  height: 30px;
   background-color: #f3701a;
   border-radius: 20px;
 }
 
-.my_card_container:hover .remove_button {
+.card_stats_happiness_container > img {
+  height: 40px;
+  width: 40px;
+}
+
+.remove_button_container {
+  min-width: 35px;
+}
+
+.remove_button {
+  color: #dc7777;
+  border: none;
+  background-color: transparent;
+  font-size: 32px;
+  display: none;
+  position: relative;
+}
+
+.add_button_container {
+  min-width: 80px;
+}
+
+.add_button {
+  color: #dc7777;
+  border: none;
+  background-color: transparent;
+  font-size: 32px;
+  display: none;
+  position: relative;
+}
+
+.card_container:hover .remove_button,
+.card_container:hover .add_button {
   display: block;
 }
 
-.my_card_stats_details > h2 {
-  font-family: 'Gaegu', cursive;
+#bottom_bar {
+  background-color: #ec5656;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 70px;
+}
+
+#open_modal_button {
+  font-size: 36px;
+  color: #ffffff;
+  background-color: #ec5656;
+  border: none;
+  border-radius: 100%;
+  height: 70px;
+  width: 70px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 35px;
+}
+
+#modal_background {
+  background-color: #000000a3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 48px;
+}
+
+#modal_container {
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  padding: 16px;
+  overflow: auto;
+}
+
+#search_input {
+  width: 100%;
+  box-sizing: border-box;
   font-size: 32px;
-  margin: 16px 0;
+  padding: 8px;
+  margin-bottom: 24px;
 }

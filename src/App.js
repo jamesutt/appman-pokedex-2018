@@ -18,18 +18,10 @@ const COLORS = {
 }
 
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [myCards, setMyCards] = useState([])
   const [cards, setCards] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchKey, setSearchKey] = useState('')
-
-  useEffect(() => {
-    fetch(`http://localhost:3030/api/cards?name=${searchKey}`)
-      .then(res => res.json())
-      .then(result => {
-        setCards(result.cards)
-      })
-  }, [searchKey])
 
   useEffect(() => {
     fetch('http://localhost:3030/api/cards')
@@ -40,139 +32,125 @@ function App() {
       })
   }, [])
 
-  const getStats = card => {
-    const hp = Math.max(Math.min(card.hp, 100), 0)
-    const strength = Math.min(card.attacks.length * 50, 100)
-    const weakness = Math.min(card.weaknesses.length * 100, 100)
-    const damage = card.attacks
-      .map(attack => Number(attack.damage.match(/\d/g).join('')))
-      .reduce((a, b) => a + b, 0)
-    const happiness = (hp / 10 + damage / 10 + 10 - weakness) / 5
+  useEffect(() => {
+    Promise.all([
+      fetch(`http://localhost:3030/api/cards?name=${searchKey}`),
+      fetch(`http://localhost:3030/api/cards?type=${searchKey}`),
+    ]).then(res =>
+      Promise.all([res[0].json(), res[1].json()]).then(results => {
+        const myCardIds = myCards.map(card => card.id)
 
-    return {
-      hp,
-      strength,
-      weakness,
-      damage,
-      happiness,
-    }
+        const nameCards = results[0].cards.filter(
+          card => !myCardIds.includes(card.id)
+        )
+
+        const nameCardIds = nameCards.map(card => card.id)
+
+        const typeCards = results[1].cards.filter(
+          card => !nameCardIds.includes(card.id)
+        )
+
+        setCards([...nameCards, ...typeCards])
+      })
+    )
+  }, [searchKey])
+
+  const onCardRemove = removedCard => {
+    setMyCards(myCards.filter(card => card.id !== removedCard.id))
+    setCards([...cards, removedCard])
   }
 
-  const removeCard = index => {
-    const tempMyCards = [...myCards]
-    tempMyCards.splice(index, 1)
-    setMyCards(tempMyCards)
+  const onCardAdd = addedCard => {
+    setMyCards([...myCards, addedCard])
+    setCards(cards.filter(card => card.id != addedCard.id))
   }
 
   return (
-    <div className="App">
+    <div>
       <h1>My Pokedex</h1>
-      <div className="my_card_outer_container">
-        {myCards.map((card, index) => (
-          <div className="my_card_container" key={card.id}>
-            <div className="my_card_stats">
-              <img className="my_card_image" src={card.imageUrl} />
-              <div className="my_card_stats_details">
-                <h2>{card.name.toUpperCase()}</h2>
-                <div className="my_stat_item">
-                  HP
-                  <div className="my_stat_bar"></div>
-                </div>
-                <div className="my_stat_item">
-                  STR
-                  <div className="my_stat_bar"></div>
-                </div>
-                <div className="my_stat_item">
-                  WEAK
-                  <div className="my_stat_bar"></div>
-                </div>
-                <div className="stat_happiness_container">
-                  <img className="happiness_icon" src={cuteIcon} />
-                  <img className="happiness_icon" src={cuteIcon} />
-                  <img className="happiness_icon" src={cuteIcon} />
-                  <img className="happiness_icon" src={cuteIcon} />
-                  <img className="happiness_icon" src={cuteIcon} />
-                </div>
-              </div>
-            </div>
-            <button className="remove_button" onClick={() => removeCard(index)}>
-              X
-            </button>
-          </div>
+      <div className="card_collection">
+        {myCards.map(card => (
+          <Card
+            card={card}
+            buttonType="REMOVE"
+            onCardAdd={onCardAdd}
+            onCardRemove={onCardRemove}
+            key={card.id}
+          />
         ))}
       </div>
-
       <div id="bottom_bar">
-        <button id="bottom_bar_button" onClick={() => setIsModalOpen(true)}>
+        <button
+          id="open_modal_button"
+          onClick={() => {
+            setIsModalOpen(true)
+          }}
+        >
           +
         </button>
       </div>
       {isModalOpen && (
-        <div
-          id="modal_container"
-          onClick={() => {
-            setIsModalOpen(false)
-          }}
-        >
-          <div
-            id="modal_content"
-            onClick={e => {
-              e.stopPropagation()
-            }}
-          >
-            <div id="modal_search_container">
-              <input
-                type="text"
-                id="modal_search"
-                placeholder="Find pokemon"
-                onChange={e => {
-                  setSearchKey(e.target.value)
-                }}
-                value={searchKey}
-              />
-              <img id="model_search_icon" src={searchIcon} />
-            </div>
+        <div id="modal_background" onClick={() => setIsModalOpen(false)}>
+          <div id="modal_container" onClick={e => e.stopPropagation()}>
+            <input
+              type="text"
+              id="search_input"
+              placeholder="Find pokemon"
+              value={searchKey}
+              onChange={e => setSearchKey(e.target.value)}
+            />
             {cards.map(card => (
-              <div className="card_container" key={card.id}>
-                <div className="card_stats">
-                  <div className="card_stats_left">
-                    <img className="card_image" src={card.imageUrl} alt="" />
-
-                    <div className="card_stats_detail">
-                      <h2>{card.name.toUpperCase()}</h2>
-                      <div className="stat_item">
-                        HP
-                        <div className="stat_bar"></div>
-                      </div>
-                      <div className="stat_item">
-                        STR
-                        <div className="stat_bar"></div>
-                      </div>
-                      <div className="stat_item">
-                        WEAK
-                        <div className="stat_bar"></div>
-                      </div>
-                      <div className="stat_happiness_container">
-                        <img className="happiness_icon" src={cuteIcon} />
-                        <img className="happiness_icon" src={cuteIcon} />
-                        <img className="happiness_icon" src={cuteIcon} />
-                        <img className="happiness_icon" src={cuteIcon} />
-                        <img className="happiness_icon" src={cuteIcon} />
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    className="add_button"
-                    onClick={() => {
-                      setMyCards([...myCards, card])
-                    }}
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
+              <Card
+                card={card}
+                buttonType="ADD"
+                onCardAdd={onCardAdd}
+                onCardRemove={onCardRemove}
+              />
             ))}
           </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const Card = ({ card, buttonType, onCardAdd, onCardRemove }) => {
+  return (
+    <div className="card_container" key={card.id}>
+      <img src={card.imageUrl} alt="" className="card_thumbnail" />
+      <div className="card_stats">
+        <h2 className="card_name">{card.name}</h2>
+        <div className="card_stats_row">
+          HP
+          <div className="card_stats_bar"></div>
+        </div>
+        <div className="card_stats_row">
+          STR
+          <div className="card_stats_bar"></div>
+        </div>
+        <div className="card_stats_row">
+          WEAK
+          <div className="card_stats_bar"></div>
+        </div>
+        <div className="card_stats_happiness_container">
+          <img src={cuteIcon} alt="" />
+          <img src={cuteIcon} alt="" />
+          <img src={cuteIcon} alt="" />
+          <img src={cuteIcon} alt="" />
+          <img src={cuteIcon} alt="" />
+        </div>
+      </div>
+      {buttonType === 'REMOVE' ? (
+        <div className="remove_button_container">
+          <button className="remove_button" onClick={() => onCardRemove(card)}>
+            X
+          </button>
+        </div>
+      ) : (
+        <div className="add_button_container">
+          <button className="add_button" onClick={() => onCardAdd(card)}>
+            Add
+          </button>
         </div>
       )}
     </div>
