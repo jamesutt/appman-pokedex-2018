@@ -34,6 +34,7 @@ button {
   grid-column-gap: 24px;
   height: 550px;
   overflow: auto;
+  margin: 0 8px;
 }
 
 .card_container {
@@ -74,12 +75,13 @@ button {
 }
 
 .card_stats_happiness_container > img {
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
 }
 
 .remove_button_container {
   min-width: 35px;
+  padding: 8px 8px 0 0;
 }
 
 .remove_button {
@@ -93,6 +95,7 @@ button {
 
 .add_button_container {
   min-width: 80px;
+  padding: 8px 8px 0 0;
 }
 
 .add_button {
@@ -151,10 +154,23 @@ button {
   overflow: auto;
 }
 
+#search_input_container {
+  width: 100%;
+  display: flex;
+  border: 1px solid #e6e6e6;
+  margin-bottom: 24px;
+}
+
 #search_input {
   width: 100%;
   box-sizing: border-box;
   font-size: 32px;
   padding: 8px;
-  margin-bottom: 24px;
+
+  border: none;
+}
+
+#search_icon {
+  width: 60px;
+  height: 60px;
 }

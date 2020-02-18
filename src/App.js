@@ -20,7 +20,7 @@ const COLORS = {
 function App() {
   const [myCards, setMyCards] = useState([])
   const [cards, setCards] = useState([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(true)
   const [searchKey, setSearchKey] = useState('')
 
   useEffect(() => {
@@ -91,13 +91,16 @@ function App() {
       {isModalOpen && (
         <div id="modal_background" onClick={() => setIsModalOpen(false)}>
           <div id="modal_container" onClick={e => e.stopPropagation()}>
-            <input
-              type="text"
-              id="search_input"
-              placeholder="Find pokemon"
-              value={searchKey}
-              onChange={e => setSearchKey(e.target.value)}
-            />
+            <div id="search_input_container">
+              <input
+                type="text"
+                id="search_input"
+                placeholder="Find pokemon"
+                value={searchKey}
+                onChange={e => setSearchKey(e.target.value)}
+              />
+              <img src={searchIcon} alt="" id="search_icon" />
+            </div>
             {cards.map(card => (
               <Card
                 card={card}
